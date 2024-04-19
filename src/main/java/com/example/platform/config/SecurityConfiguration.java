@@ -22,25 +22,17 @@ public class SecurityConfiguration {
     }
 
 
-    /*@Bean
-    MvcRequestMatcher.Builder mvc(HandlerMappingIntrospector introspector) {
-        return new MvcRequestMatcher.Builder(introspector);
-    }*/
-
-
-
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(csrfCustomizer -> csrfCustomizer.disable())
                 .authorizeHttpRequests(requests -> requests
-                    .requestMatchers( "/api/v1/demo/user").hasAnyRole("USER")
+                        .requestMatchers( "/api/v1/demo/all").permitAll()
+                        .requestMatchers( "/api/v1/demo/admin").hasAnyRole("ADMIN")
                         .requestMatchers( "/api/v1/demo/secure").authenticated()
-                        .requestMatchers( "/api/v1/demo/**").permitAll()
-                    .requestMatchers( "/api/v1/auth/**").permitAll()
-                    .requestMatchers("/api/v1/**").permitAll()
-                    .anyRequest().authenticated()
+                        .requestMatchers( "/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/v1/**").permitAll()
+                        .anyRequest().authenticated()
                 )
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
@@ -48,34 +40,6 @@ public class SecurityConfiguration {
 
         return http.build();
     }
-
-
-
-    /*
-    private static final String[] WHITE_LIST_URL = {"/api/v1/auth/**"};
-
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
-        http
-                .csrf(csrfCustomizer -> csrfCustomizer.disable())
-                .authorizeHttpRequests(req ->req
-                        .requestMatchers(WHITE_LIST_URL)
-                                .permitAll()
-                                .anyRequest()
-                                .authenticated()
-                )
-                .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
-                .authenticationProvider(authenticationProvider)
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-                /*.logout(logout ->
-                        logout.logoutUrl("/api/v1/auth/logout")
-                                .addLogoutHandler(logoutHandler)
-                                .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext())
-                )*/
-
-        //return http.build();
-    //}
-
 
 
 }

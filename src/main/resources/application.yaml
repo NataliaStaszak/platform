@@ -1,19 +1,16 @@
 spring:
   application:
     name: platform
+    jwt:
+      secretKey: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
   datasource:
     url: jdbc:mysql://localhost:3306/platform?useSSL=false&serverTimezone=Europe/Warsaw
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: admin
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
+
     show-sql: false
     properties:
       hibernate:
         format_sql: true
 
-logging:
-  level:
-    root: debug

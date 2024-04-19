@@ -18,7 +18,7 @@ public class demoController {
     public ResponseEntity<String> test2() {
         return ResponseEntity.ok("sekjur xd");
     }
-    @GetMapping("/user")
+    @GetMapping("/admin")
     public ResponseEntity<String> test3() {
         return ResponseEntity.ok("sekjur xd");
     }

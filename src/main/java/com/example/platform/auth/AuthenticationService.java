@@ -26,7 +26,7 @@ public class AuthenticationService {
 
 
     public AuthenticationResponse register(RegisterRequest request) {
-       User user = new User(
+        User user = new User(
                request.getFirstName(),
                request.getLastName(),
                request.getEmail(),
