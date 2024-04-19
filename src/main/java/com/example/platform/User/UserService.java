@@ -5,6 +5,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -33,5 +35,15 @@ public class UserService {
 
         // save the new password
         repository.save(user);
+    }
+
+    public List<UserDTO> findAllUsers() {
+        List<UserDTO> users= new ArrayList<>();
+        for (User user : repository.findAllUsersByRole(Role.USER))
+            users.add(new UserDTO(user.getId(),user.getFirstName(), user.getLastName(), user.getEmail()));
+        return users;
+    }
+    public void deleteUser(Long id) {
+        repository.deleteById(id);
     }
 }
