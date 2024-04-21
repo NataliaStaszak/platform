@@ -2,8 +2,10 @@ package com.example.platform.course;
 import com.example.platform.User.Role;
 import com.example.platform.User.User;
 import com.example.platform.User.UserDTO;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,16 +18,24 @@ public class CourseService {
     public CourseService(CourseRepository repository) {
         this.repository = repository;
     }
-    public List<Course> findAllCourses() {
-        /*List<UserDTO> users= new ArrayList<>();
-        for (User user : repository.findAllUsersByRole(Role.USER))
-            users.add(new UserDTO(user.getId(),user.getFirstName(), user.getLastName(), user.getEmail()));*/
-        return (List<Course>) repository.findAll();
+    public List<CourseDTO> findAllCourses() {
+        List<CourseDTO> courses= new ArrayList<>();
+        for (Course course : repository.findAll())
+            courses.add(CourseService.map(course));
+        return courses;
     }
     Optional<CourseDTO> getCourseById(Long id){
         return repository.findById(id).map(CourseService::map);
 
 
+    }
+    public void createCourse(SaveCourseDTO request, Principal connectedUser){
+        var author = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        repository.save(new Course(request.getName(), author));
+    }
+
+    public void deleteCourse(Long id) {
+        repository.deleteById(id);
     }
 
     static CourseDTO map(Course course){

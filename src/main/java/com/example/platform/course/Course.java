@@ -13,8 +13,7 @@ public class Course {
     @JoinColumn(name = "author_id")
     User author;
 
-    public Course(Long id, String name, User author) {
-        this.id = id;
+    public Course(String name, User author) {
         this.name = name;
         this.author = author;
     }
