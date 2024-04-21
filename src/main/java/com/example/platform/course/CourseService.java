@@ -22,7 +22,22 @@ public class CourseService {
             users.add(new UserDTO(user.getId(),user.getFirstName(), user.getLastName(), user.getEmail()));*/
         return (List<Course>) repository.findAll();
     }
-    Optional<Course> getCourseById(Long id){
-        return repository.findById(id);
+    Optional<CourseDTO> getCourseById(Long id){
+        return repository.findById(id).map(CourseService::map);
+
+
+    }
+
+    static CourseDTO map(Course course){
+        CourseDTO courseDTO = new CourseDTO();
+        courseDTO.setId(course.getId());
+        courseDTO.setName(course.getName());
+        courseDTO.setAuthor(new UserDTO(course.getAuthor().getId(),
+                course.getAuthor().getFirstName(),
+                course.getAuthor().getLastName(),
+                course.getAuthor().getEmail()
+        ));
+
+        return courseDTO;
     }
 }
