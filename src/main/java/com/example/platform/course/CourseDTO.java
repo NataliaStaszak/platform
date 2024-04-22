@@ -7,6 +7,15 @@ public class CourseDTO {
     String name;
     UserDTO author;
 
+    public CourseDTO() {
+    }
+
+    public CourseDTO(Long id, String name, UserDTO author) {
+        this.id = id;
+        this.name = name;
+        this.author = author;
+    }
+
     public Long getId() {
         return id;
     }

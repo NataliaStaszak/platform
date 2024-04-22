@@ -4,6 +4,7 @@ package com.example.platform.course;
 import com.example.platform.User.User;
 import com.example.platform.User.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,36 +44,31 @@ public class CourseController {
         courseService.createCourse(request, connectedUser);
         return ResponseEntity.ok().build();
     }
-    @PostMapping("/add/test/xd")
-    public ResponseEntity<?> test(
-    ) {
-        return ResponseEntity.ok().build();
-    }
+    @DeleteMapping("/{id}")
+    ResponseEntity<?> deleteCourse(@PathVariable Long id) {
+        courseService.deleteCourse(id);
+        return ResponseEntity.noContent().build();}
+
+    /*
     @Transactional
     @PostMapping("/add")
     @ResponseBody
     public ResponseEntity<?> addUserToCourse(
             @RequestBody UserAddRequest request
     ) {
-        System.out.println(request.getUserId().toString()+request.getCourseId().toString());
         Optional<User> userToAdd= userService.getUserById(request.getUserId());
         Optional<Course> courseToJoin= courseService.getCourseById(request.getCourseId());
         courseToJoin.ifPresent( course -> {
             userToAdd.ifPresent( user ->{
-                course.addAttendant(user);
-                for(User i: course.getAttendants())
-                {
-                    System.out.println(i.getFirstName());
-                }
+                courseService.askToJoin(user,course);
             });
         });
 
         return ResponseEntity.ok().build();
-    }
+    }*/
 
-    @DeleteMapping("/{id}")
-    ResponseEntity<?> deleteCourse(@PathVariable Long id) {
-        courseService.deleteCourse(id);
-        return ResponseEntity.noContent().build();}
+
+
+
 
 }

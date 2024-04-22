@@ -13,10 +13,14 @@ import java.util.Optional;
 public class CourseService {
 
     private final CourseRepository repository;
+    private final PendingInviteRepository pendingInviteRepository;
 
-    public CourseService(CourseRepository repository) {
+    public CourseService(CourseRepository repository, PendingInviteRepository pendingInviteRepository) {
         this.repository = repository;
+        this.pendingInviteRepository = pendingInviteRepository;
     }
+
+
     public List<CourseDTO> findAllCourses() {
         List<CourseDTO> courses= new ArrayList<>();
         for (Course course : repository.findAll())
@@ -50,4 +54,6 @@ public class CourseService {
 
         return courseDTO;
     }
+
+
 }
