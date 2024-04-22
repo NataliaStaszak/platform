@@ -1,34 +1,38 @@
 package com.example.platform.course;
 
 
-import com.example.platform.User.ChangePasswordRequest;
-import com.example.platform.User.UserDTO;
+import com.example.platform.User.User;
+import com.example.platform.User.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/courses")
 public class CourseController {
 
-    private CourseService service;
+    private CourseService courseService;
+    private UserService userService;
 
-    public CourseController(CourseService service) {
-        this.service = service;
+    public CourseController(CourseService courseService, UserService userService) {
+        this.courseService = courseService;
+        this.userService = userService;
     }
 
     @GetMapping("/{id}")
     @ResponseBody
     public ResponseEntity<CourseDTO> GetById(@PathVariable Long id){
-        return service.getCourseById(id)
+        return courseService.getCourseDTOById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
     @GetMapping()
     public ResponseEntity<List<CourseDTO>> findAllCourses() {
-        return ResponseEntity.ok(service.findAllCourses());
+        return ResponseEntity.ok(courseService.findAllCourses());
     }
 
     @PostMapping
@@ -36,12 +40,39 @@ public class CourseController {
             @RequestBody SaveCourseDTO request,
             Principal connectedUser
     ) {
-        service.createCourse(request, connectedUser);
+        courseService.createCourse(request, connectedUser);
         return ResponseEntity.ok().build();
     }
+    @PostMapping("/add/test/xd")
+    public ResponseEntity<?> test(
+    ) {
+        return ResponseEntity.ok().build();
+    }
+    @Transactional
+    @PostMapping("/add")
+    @ResponseBody
+    public ResponseEntity<?> addUserToCourse(
+            @RequestBody UserAddRequest request
+    ) {
+        System.out.println(request.getUserId().toString()+request.getCourseId().toString());
+        Optional<User> userToAdd= userService.getUserById(request.getUserId());
+        Optional<Course> courseToJoin= courseService.getCourseById(request.getCourseId());
+        courseToJoin.ifPresent( course -> {
+            userToAdd.ifPresent( user ->{
+                course.addAttendant(user);
+                for(User i: course.getAttendants())
+                {
+                    System.out.println(i.getFirstName());
+                }
+            });
+        });
+
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping("/{id}")
     ResponseEntity<?> deleteCourse(@PathVariable Long id) {
-        service.deleteCourse(id);
+        courseService.deleteCourse(id);
         return ResponseEntity.noContent().build();}
 
 }

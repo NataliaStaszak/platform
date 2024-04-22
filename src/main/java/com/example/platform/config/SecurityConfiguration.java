@@ -36,6 +36,7 @@ public class SecurityConfiguration {
                         .requestMatchers( HttpMethod.PATCH,"/api/v1/users").authenticated()
                         .requestMatchers( "/api/v1/auth/**").permitAll()
                         .requestMatchers( HttpMethod.GET,"/api/v1/courses/**").permitAll()
+                        .requestMatchers( HttpMethod.POST,"/api/v1/courses/add/**").hasAnyRole("ADMIN") //TESt
                         .requestMatchers( HttpMethod.POST,"/api/v1/courses").hasAnyRole("ADMIN")
                         .requestMatchers( HttpMethod.GET,"/api/v1/courses").permitAll()
                         .requestMatchers( HttpMethod.DELETE,"/api/v1/courses/**").hasAnyRole("ADMIN")

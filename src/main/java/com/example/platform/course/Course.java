@@ -3,6 +3,9 @@ package com.example.platform.course;
 import com.example.platform.User.User;
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 public class Course {
     @Id
@@ -12,6 +15,8 @@ public class Course {
     @ManyToOne
     @JoinColumn(name = "author_id")
     User author;
+    @ManyToMany
+    private List<User> attendants = new ArrayList<>();
 
     public Course(String name, User author) {
         this.name = name;
@@ -43,5 +48,17 @@ public class Course {
 
     public void setAuthor(User author) {
         this.author = author;
+    }
+
+    public List<User> getAttendants() {
+        return attendants;
+    }
+
+    public void setAttendants(List<User> attendants) {
+        this.attendants = attendants;
+    }
+
+    void addAttendant(User user){
+        attendants.add(user);
     }
 }

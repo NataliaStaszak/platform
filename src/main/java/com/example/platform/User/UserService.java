@@ -1,5 +1,8 @@
 package com.example.platform.User;
 
+import com.example.platform.course.Course;
+import com.example.platform.course.CourseDTO;
+import com.example.platform.course.CourseService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -7,6 +10,7 @@ import org.springframework.stereotype.Service;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -46,4 +50,11 @@ public class UserService {
     public void deleteUser(Long id) {
         repository.deleteById(id);
     }
+    public Optional<User> getUserById(Long id){
+        return repository.findById(id);
+    }
+
+
+
+
 }

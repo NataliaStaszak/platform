@@ -1,5 +1,4 @@
 package com.example.platform.course;
-import com.example.platform.User.Role;
 import com.example.platform.User.User;
 import com.example.platform.User.UserDTO;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,10 +23,11 @@ public class CourseService {
             courses.add(CourseService.map(course));
         return courses;
     }
-    Optional<CourseDTO> getCourseById(Long id){
+    Optional<CourseDTO> getCourseDTOById(Long id){
         return repository.findById(id).map(CourseService::map);
-
-
+    }
+    Optional<Course> getCourseById(Long id){
+        return repository.findById(id);
     }
     public void createCourse(SaveCourseDTO request, Principal connectedUser){
         var author = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
