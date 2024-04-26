@@ -37,7 +37,6 @@ public class InvitationService {
     }
 
     public List<InviteDTO> findCoursesUser(Long id) {
-        //TODO
         List<InviteDTO> invites= new ArrayList<>();
         for(PendingInvite invite :repository.getAllByUser_Id(id))
         {

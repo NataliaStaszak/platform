@@ -2,6 +2,7 @@ package com.example.platform.course;
 
 
 import com.example.platform.User.User;
+import com.example.platform.User.UserDTO;
 import com.example.platform.User.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -36,6 +37,19 @@ public class CourseController {
         return ResponseEntity.ok(courseService.findAllCourses());
     }
 
+    @GetMapping("/participants/{id}")
+    public ResponseEntity<List<UserDTO>> findParticipants(@PathVariable Long id) {
+        return ResponseEntity.ok(courseService.findAllParticipants(id));
+    }
+    @GetMapping("/myCourses")
+    public ResponseEntity<List<CourseDTO>> findParticipants(Principal connectedUser) {
+        return ResponseEntity.ok(courseService.findAllUserCourses(connectedUser));
+    }
+    @GetMapping("/myCoursesAdmin")
+    public ResponseEntity<List<CourseDTO>> findAdminCourses(Principal connectedUser) {
+        return ResponseEntity.ok(courseService.findAllAuthorCourses(connectedUser));
+    }
+
     @PostMapping
     public ResponseEntity<?> saveCourse(
             @RequestBody SaveCourseDTO request,
@@ -49,23 +63,7 @@ public class CourseController {
         courseService.deleteCourse(id);
         return ResponseEntity.noContent().build();}
 
-    /*
-    @Transactional
-    @PostMapping("/add")
-    @ResponseBody
-    public ResponseEntity<?> addUserToCourse(
-            @RequestBody UserAddRequest request
-    ) {
-        Optional<User> userToAdd= userService.getUserById(request.getUserId());
-        Optional<Course> courseToJoin= courseService.getCourseById(request.getCourseId());
-        courseToJoin.ifPresent( course -> {
-            userToAdd.ifPresent( user ->{
-                courseService.askToJoin(user,course);
-            });
-        });
 
-        return ResponseEntity.ok().build();
-    }*/
 
 
 

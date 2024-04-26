@@ -1,4 +1,5 @@
 package com.example.platform.course;
+import com.example.platform.User.Role;
 import com.example.platform.User.User;
 import com.example.platform.User.UserDTO;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -56,4 +57,30 @@ public class CourseService {
     }
 
 
+    public List<UserDTO> findAllParticipants(Long id) {
+        List<UserDTO> courseUsers = new ArrayList<>();
+        repository.findById(id).ifPresent(course->
+        {
+            for (User user: course.getAttendants()) {
+                courseUsers.add(new UserDTO(user.getId(),user.getFirstName(), user.getLastName(), user.getEmail()));
+            }
+        });
+        return courseUsers;
+    }
+
+    public List<CourseDTO> findAllUserCourses(Principal connectedUser){
+        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        List<CourseDTO> courses= new ArrayList<>();
+        for (Course course : repository.findAllByAttendantsContains(user))
+            courses.add(CourseService.map(course));
+        return courses;
+
+    }
+    public List<CourseDTO> findAllAuthorCourses(Principal connectedUser) {
+        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        List<CourseDTO> courses = new ArrayList<>();
+        for (Course course : repository.findAllByAuthorId(user.getId()))
+            courses.add(CourseService.map(course));
+        return courses;
+    }
 }
