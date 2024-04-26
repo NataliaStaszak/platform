@@ -43,7 +43,7 @@ public class CourseService {
         repository.deleteById(id);
     }
 
-    static CourseDTO map(Course course){
+    public static CourseDTO map(Course course){
         CourseDTO courseDTO = new CourseDTO();
         courseDTO.setId(course.getId());
         courseDTO.setName(course.getName());
