@@ -69,8 +69,10 @@ public class IndividualTaskService {
         return tasks;
     }
     public void deleteTask(Long id) {
+        System.out.println("DELETE BY ID");
         repository.deleteById(id);
     }
+
     static IndividualTaskDTO map(IndividualTask task){
         IndividualTaskDTO taskDTO = new IndividualTaskDTO();
 
