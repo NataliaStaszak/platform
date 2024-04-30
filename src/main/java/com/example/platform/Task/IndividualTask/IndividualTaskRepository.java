@@ -1,6 +1,6 @@
-package com.example.platform.IndividualTask;
+package com.example.platform.Task.IndividualTask;
 
-import com.example.platform.course.PendingInvite;
+import com.example.platform.Task.IndividualTask.IndividualTask;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

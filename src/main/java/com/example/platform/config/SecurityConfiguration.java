@@ -54,6 +54,8 @@ public class SecurityConfiguration {
                         .requestMatchers( HttpMethod.GET,"/api/v1/tasks/myTaskAdmin").hasAnyRole("ADMIN")
                         .requestMatchers( HttpMethod.DELETE,"/api/v1/tasks/**").hasAnyRole("ADMIN")
                         .requestMatchers( HttpMethod.PATCH,"/api/v1/tasks").hasAnyRole("ADMIN")
+                        .requestMatchers( HttpMethod.POST,"/api/v1/tasks/**").hasAnyRole("ADMIN")
+                        .requestMatchers( HttpMethod.DELETE,"/api/v1/tasks/task/**").hasAnyRole("ADMIN")
                         .requestMatchers("/api/v1/**").authenticated()
                         .anyRequest().authenticated()
                 )

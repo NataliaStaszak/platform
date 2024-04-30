@@ -1,9 +1,4 @@
-package com.example.platform.IndividualTask;
-
-import com.example.platform.course.Course;
-import com.example.platform.course.CourseDTO;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+package com.example.platform.Task.IndividualTask;
 
 import java.util.Date;
 

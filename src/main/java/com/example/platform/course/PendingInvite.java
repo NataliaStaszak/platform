@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 public class PendingInvite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

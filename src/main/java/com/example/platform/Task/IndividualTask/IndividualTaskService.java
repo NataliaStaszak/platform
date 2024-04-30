@@ -1,18 +1,12 @@
-package com.example.platform.IndividualTask;
+package com.example.platform.Task.IndividualTask;
 
-import com.example.platform.User.ChangePasswordRequest;
+import com.example.platform.Task.DeadlineChangeRequest;
 import com.example.platform.User.User;
-import com.example.platform.User.UserDTO;
 import com.example.platform.course.Course;
-import com.example.platform.course.CourseDTO;
 import com.example.platform.course.CourseRepository;
 import com.example.platform.course.CourseService;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.security.Principal;
 import java.util.ArrayList;

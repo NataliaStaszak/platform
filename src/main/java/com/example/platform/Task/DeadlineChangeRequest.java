@@ -1,4 +1,4 @@
-package com.example.platform.IndividualTask;
+package com.example.platform.Task;
 
 import java.util.Date;
 

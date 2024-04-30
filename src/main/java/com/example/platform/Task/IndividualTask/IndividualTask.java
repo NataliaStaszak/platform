@@ -1,21 +1,22 @@
-package com.example.platform.IndividualTask;
+package com.example.platform.Task.IndividualTask;
 
+import com.example.platform.Task.Task;
 import com.example.platform.course.Course;
 import jakarta.persistence.*;
 
 import java.util.Date;
 
 @Entity
-public class IndividualTask {
+public class IndividualTask extends Task {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
     @ManyToOne
     @JoinColumn(name = "course_id")
-    Course course;
-    Date date;
-    Date deadline;
-    String contents;
+    private Course course;
+    private Date date;
+    private Date deadline;
+    private String contents;
 
     public IndividualTask(Course course, Date date, Date deadline, String contents) {
         this.course = course;

@@ -10,11 +10,11 @@ import java.util.List;
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
-    String name;
+    private Long id;
+    private String name;
     @ManyToOne
     @JoinColumn(name = "author_id")
-    User author;
+    private User author;
     @ManyToMany
     private List<User> attendants = new ArrayList<>();
 
