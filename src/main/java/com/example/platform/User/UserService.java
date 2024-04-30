@@ -7,6 +7,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,15 +45,19 @@ public class UserService {
     public List<UserDTO> findAllUsers() {
         List<UserDTO> users= new ArrayList<>();
         for (User user : repository.findAllUsersByRole(Role.USER))
-            users.add(new UserDTO(user.getId(),user.getFirstName(), user.getLastName(), user.getEmail()));
+            users.add(UserService.map(user));
         return users;
+    }
+    Optional<UserDTO> getUserDTOById(Long id){
+        return repository.findById(id).map(UserService::map);
     }
     public void deleteUser(Long id) {
         repository.deleteById(id);
     }
-    public Optional<User> getUserById(Long id){
-        return repository.findById(id);
+    public static UserDTO map(User user){
+        return new UserDTO(user.getId(),user.getFirstName(),user.getLastName(),user.getEmail());
     }
+
 
 
 

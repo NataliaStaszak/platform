@@ -32,9 +32,9 @@ public class SecurityConfiguration {
                         .requestMatchers( "/api/v1/demo/admin").hasAnyRole("ADMIN")
                         .requestMatchers( "/api/v1/demo/secure").authenticated()
                         .requestMatchers( HttpMethod.GET,"/api/v1/users/**").hasAnyRole("ADMIN")
+                        .requestMatchers( HttpMethod.GET,"/api/v1/users").hasAnyRole("ADMIN")
                         .requestMatchers( HttpMethod.DELETE,"/api/v1/users/**").hasAnyRole("ADMIN")
                         .requestMatchers( HttpMethod.PATCH,"/api/v1/users").authenticated()
-                        .requestMatchers( "/api/v1/auth/**").permitAll()
                         .requestMatchers( HttpMethod.GET,"/api/v1/courses/**").permitAll()
                         .requestMatchers( HttpMethod.POST,"/api/v1/courses").hasAnyRole("ADMIN")
                         .requestMatchers( HttpMethod.GET,"/api/v1/courses").permitAll()
@@ -57,6 +57,7 @@ public class SecurityConfiguration {
                         .requestMatchers( HttpMethod.DELETE,"/api/v1/tasks").hasAnyRole("ADMIN")
 
                         .requestMatchers("/api/v1/**").authenticated()
+                        .requestMatchers( "/api/v1/auth/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

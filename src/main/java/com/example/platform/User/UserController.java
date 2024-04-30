@@ -1,5 +1,6 @@
 package com.example.platform.User;
 
+import com.example.platform.course.CourseDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,9 +30,17 @@ public class UserController {
         return ResponseEntity.noContent().build();}
 
 
-    @GetMapping("/users")
+    @GetMapping()
     public ResponseEntity<List<UserDTO>> findAllUsers() {
         return ResponseEntity.ok(service.findAllUsers());
+    }
+
+    @GetMapping("/{id}")
+    @ResponseBody
+    public ResponseEntity<UserDTO> GetById(@PathVariable Long id){
+        return service.getUserDTOById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
 }
