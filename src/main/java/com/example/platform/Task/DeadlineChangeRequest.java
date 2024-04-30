@@ -29,4 +29,7 @@ public class DeadlineChangeRequest {
     public void setNewDeadline(Date newDeadline) {
         this.newDeadline = newDeadline;
     }
+
+    public static class TaskDTO {
+    }
 }
