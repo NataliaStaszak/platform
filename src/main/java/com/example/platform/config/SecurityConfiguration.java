@@ -28,6 +28,7 @@ public class SecurityConfiguration {
         http
                 .csrf(csrfCustomizer -> csrfCustomizer.disable())
                 .authorizeHttpRequests(requests -> requests
+                        .requestMatchers( "/api/v1/auth/**").permitAll()
                         .requestMatchers( "/api/v1/demo/all").permitAll()
                         .requestMatchers( "/api/v1/demo/admin").hasAnyRole("ADMIN")
                         .requestMatchers( "/api/v1/demo/secure").authenticated()
@@ -57,7 +58,7 @@ public class SecurityConfiguration {
                         .requestMatchers( HttpMethod.DELETE,"/api/v1/tasks").hasAnyRole("ADMIN")
 
                         .requestMatchers("/api/v1/**").authenticated()
-                        .requestMatchers( "/api/v1/auth/**").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
