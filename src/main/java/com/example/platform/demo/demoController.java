@@ -15,15 +15,15 @@ public class demoController {
 
     @GetMapping("/secure")
     public ResponseEntity<String> test() {
-        return ResponseEntity.ok("sekjur xd");
+        return ResponseEntity.ok("sekjur");
     }
     @GetMapping("/all")
     public ResponseEntity<String> test2() {
-        return ResponseEntity.ok("sekjur xd");
+        return ResponseEntity.ok("sekjur");
     }
     @GetMapping("/admin")
     public ResponseEntity<String> test3() {
-        return ResponseEntity.ok("sekjur xd");
+        return ResponseEntity.ok("sekjur");
     }
 
 }
