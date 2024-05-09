@@ -28,6 +28,7 @@ public class SecurityConfiguration {
         http
                 .csrf(csrfCustomizer -> csrfCustomizer.disable())
                 .authorizeHttpRequests(requests -> requests
+                        .requestMatchers( HttpMethod.GET,"/api/v1/resources/download/**").permitAll()
                         .requestMatchers( "/api/v1/auth/**").permitAll()
                         .requestMatchers( "/api/v1/demo/all").permitAll()
                         .requestMatchers( "/api/v1/demo/admin").hasAnyRole("ADMIN")
@@ -56,6 +57,9 @@ public class SecurityConfiguration {
                         .requestMatchers( HttpMethod.GET,"/api/v1/tasks/myTasksAdmin").hasAnyRole("ADMIN")
                         .requestMatchers( HttpMethod.PATCH,"/api/v1/tasks").hasAnyRole("ADMIN")
                         .requestMatchers( HttpMethod.DELETE,"/api/v1/tasks").hasAnyRole("ADMIN")
+                        .requestMatchers( HttpMethod.GET,"/api/v1/resources").hasAnyRole("ADMIN")
+                        .requestMatchers( HttpMethod.POST,"/api/v1/resources/upload").authenticated()
+
 
                         .requestMatchers("/api/v1/**").authenticated()
 
