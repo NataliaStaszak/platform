@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface GroupTaskRepository extends CrudRepository<GroupTask,Long> {
     List<GroupTask> getAllByCourse_Id(Long id);
     Optional<GroupTask> getById(Long id);
+
 }

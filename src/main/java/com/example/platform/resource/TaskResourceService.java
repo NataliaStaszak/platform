@@ -36,7 +36,7 @@ public class TaskResourceService {
 
 
 
-    public TaskResource saveTaskResource(MultipartFile file, Principal connectedUser) throws Exception {
+    public TaskResource saveTaskResource(MultipartFile file,Long id, Principal connectedUser) throws Exception {
         var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         try {
@@ -45,8 +45,8 @@ public class TaskResourceService {
                         + fileName);
             }
             TaskResource taskResource= new TaskResource();
-
-            Optional<IndividualTask> task=individualTaskRepository.findById(1L);
+            System.out.println(id);
+            Optional<IndividualTask> task=individualTaskRepository.findById(id);
 
             task.ifPresent(myTask->
                 {
@@ -74,6 +74,10 @@ public class TaskResourceService {
                 .findById(fileId)
                 .orElseThrow(
                         () -> new Exception("File not found with Id: " + fileId));
+    }
+
+    public void delete(String id) {
+        taskResourceRepository.deleteById(id);
     }
 }
 
