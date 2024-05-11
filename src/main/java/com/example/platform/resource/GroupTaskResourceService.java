@@ -27,24 +27,24 @@ public class GroupTaskResourceService {
     private final GroupTaskRepository groupTaskRepository;
 
     public GroupTaskResourceService(GroupTaskResourceRepository groupTaskResourceRepository, GroupTaskRepository groupTaskRepository) {
-            this.groupTaskResourceRepository = groupTaskResourceRepository;
-            this.groupTaskRepository = groupTaskRepository;
+        this.groupTaskResourceRepository = groupTaskResourceRepository;
+        this.groupTaskRepository = groupTaskRepository;
     }
 
     public GroupTaskResource saveGroupTaskResource(MultipartFile file, Long id, Principal connectedUser) throws Exception {
 
         var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
-        Team team = findTeam(user.getId(),id);
-        Optional<GroupTask> grouptask=groupTaskRepository.findById(id);
+        Team team = findTeam(user.getId(), id);
+        Optional<GroupTask> grouptask = groupTaskRepository.findById(id);
 
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         try {
-            if(fileName.contains("..")) {
-                throw  new Exception("Filename contains invalid path sequence "
+            if (fileName.contains("..")) {
+                throw new Exception("Filename contains invalid path sequence "
                         + fileName);
             }
-            GroupTaskResource taskResource= new GroupTaskResource();
-            grouptask.ifPresent(myTask->
+            GroupTaskResource taskResource = new GroupTaskResource();
+            grouptask.ifPresent(myTask ->
             {
                 taskResource.setGroupTask(myTask);
                 taskResource.setAuthor(team);
@@ -66,10 +66,11 @@ public class GroupTaskResourceService {
 
     public GroupTaskResource getAttachment(String fileId) throws Exception {
         return groupTaskResourceRepository
-                    .findById(fileId)
-                    .orElseThrow(
-                            () -> new Exception("File not found with Id: " + fileId));
+                .findById(fileId)
+                .orElseThrow(
+                        () -> new Exception("File not found with Id: " + fileId));
     }
+
     public void delete(String id) {
         groupTaskResourceRepository.deleteById(id);
     }
@@ -77,28 +78,26 @@ public class GroupTaskResourceService {
 
     public List<TaskResourceDTO> getResourcesFromGroupTaskOfUser(Long taskId, Principal connectedUser) {
         var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
-        Long teamId = findTeam(user.getId(),taskId).getId();
-        List<TaskResourceDTO> responseData=new ArrayList<>();
-        List<GroupTaskResource> resources = groupTaskResourceRepository.getAllByAuthor_IdAndGroupTask_Id(teamId,taskId);
-        for(GroupTaskResource resource:resources)
-        {
+        Long teamId = findTeam(user.getId(), taskId).getId();
+        List<TaskResourceDTO> responseData = new ArrayList<>();
+        List<GroupTaskResource> resources = groupTaskResourceRepository.getAllByAuthor_IdAndGroupTask_Id(teamId, taskId);
+        for (GroupTaskResource resource : resources) {
             responseData.add(map(resource));
         }
         return responseData;
     }
 
     public List<TaskResourceDTO> getResourcesFromGroupTask(Long taskId) {
-        List<TaskResourceDTO> responseData=new ArrayList<>();
+        List<TaskResourceDTO> responseData = new ArrayList<>();
         List<GroupTaskResource> resources = groupTaskResourceRepository.getAllByGroupTask_Id(taskId);
-        for(GroupTaskResource resource:resources)
-        {
+        for (GroupTaskResource resource : resources) {
             responseData.add(map(resource));
         }
         return responseData;
     }
 
-    public static TaskResourceDTO map(GroupTaskResource taskResource){
-        String downloadURl = "/api/v1/resources/downloadGroup/"+taskResource.getId();
+    public static TaskResourceDTO map(GroupTaskResource taskResource) {
+        String downloadURl = "/api/v1/resources/downloadGroup/" + taskResource.getId();
         return new TaskResourceDTO(taskResource.getFileName(),
                 downloadURl,
                 taskResource.getFileType(),
@@ -106,16 +105,15 @@ public class GroupTaskResourceService {
                 taskResource.getAuthor().getId());
     }
 
-    public Team findTeam(Long userId,Long taskId){
+    public Team findTeam(Long userId, Long taskId) {
         Team team = new Team();
 
-        Optional<GroupTask> grouptask=groupTaskRepository.findById(taskId);
-        grouptask.ifPresent(task->
+        Optional<GroupTask> grouptask = groupTaskRepository.findById(taskId);
+        grouptask.ifPresent(task ->
         {
-            for(Team thisTeam:task.getTeams())
-            {
-                for (User thisUser:thisTeam.getMembers()){
-                    if(thisUser.getId()==userId){
+            for (Team thisTeam : task.getTeams()) {
+                for (User thisUser : thisTeam.getMembers()) {
+                    if (thisUser.getId() == userId) {
                         team.setId(thisTeam.getId());
                         team.setMembers(thisTeam.getMembers());
                     }
@@ -124,5 +122,6 @@ public class GroupTaskResourceService {
         });
         return team;
     }
+
 }
 

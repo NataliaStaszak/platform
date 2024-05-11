@@ -10,6 +10,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.example.platform.User.User;
 
+import java.util.Optional;
+
 @Service
 public class AuthenticationService {
     private final UserRepository userRepository;
@@ -26,6 +28,8 @@ public class AuthenticationService {
 
 
     public AuthenticationResponse register(RegisterRequest request) {
+        if(userRepository.existsByEmail(request.getEmail()))
+            return new AuthenticationResponse("Email already in database");
         User user = new User(
                request.getFirstName(),
                request.getLastName(),
@@ -36,6 +40,21 @@ public class AuthenticationService {
        userRepository.save(user);
        String jwtToken=jwtService.generateToken(user);
        return new AuthenticationResponse(jwtToken);
+
+    }
+    public AuthenticationResponse registerAdmin(RegisterRequest request) {
+        if(userRepository.existsByEmail(request.getEmail()))
+            return new AuthenticationResponse("Email already in database");
+        User user = new User(
+                request.getFirstName(),
+                request.getLastName(),
+                request.getEmail(),
+                passwordEncoder.encode(request.getPassword()),
+                Role.ADMIN
+        );
+        userRepository.save(user);
+        String jwtToken=jwtService.generateToken(user);
+        return new AuthenticationResponse(jwtToken);
 
     }
 

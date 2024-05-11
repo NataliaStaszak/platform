@@ -30,7 +30,9 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(requests -> requests
                         .requestMatchers( HttpMethod.GET,"/api/v1/resources/downloadGroup/**").permitAll()
                         .requestMatchers( HttpMethod.GET,"/api/v1/resources/download/**").permitAll()
-                        .requestMatchers( "/api/v1/auth/**").permitAll()
+                        .requestMatchers( "/api/v1/auth/register").permitAll()
+                        .requestMatchers( "/api/v1/auth/authenticate").permitAll()
+                        .requestMatchers( "/api/v1/auth/registerNewAdmin").hasAnyRole("ADMIN")
                         .requestMatchers( "/api/v1/demo/all").permitAll()
                         .requestMatchers( "/api/v1/demo/admin").hasAnyRole("ADMIN")
                         .requestMatchers( "/api/v1/demo/secure").authenticated()

@@ -7,4 +7,5 @@ import java.util.List;
 public interface PendingInviteRepository extends CrudRepository<PendingInvite,Long> {
     List<PendingInvite> getAllByCourse_Author_Id(Long id);
     List<PendingInvite> getAllByUser_Id(Long id);
+    boolean existsByCourse_IdAndAndUser_Id(Long CourseId,Long UserId);
 }

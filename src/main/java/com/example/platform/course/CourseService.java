@@ -83,4 +83,11 @@ public class CourseService {
             courses.add(CourseService.map(course));
         return courses;
     }
+
+    public boolean isUserMember(Long id,User user) {
+        return repository.existsByIdAndAndAttendantsContains(id,user);
+    }
+
+    public boolean isUserAuthor(Long id, User user) {return repository.existsByIdAndAndAuthor(id,user);}
 }
+

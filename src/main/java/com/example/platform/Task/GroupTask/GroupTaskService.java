@@ -8,6 +8,7 @@ import com.example.platform.User.User;
 import com.example.platform.User.UserDTO;
 import com.example.platform.User.UserRepository;
 import com.example.platform.course.Course;
+import com.example.platform.course.CourseDTO;
 import com.example.platform.course.CourseRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -102,12 +103,32 @@ public class GroupTaskService {
     public void deleteTeam(Long id){
         teamRepository.deleteById(id);
     }
+
     public void changeDeadline(DeadlineChangeRequest request)
     {
         groupTaskRepository.findById(request.getTaskId()).ifPresent(task -> {
             task.setDeadline(request.getNewDeadline());
             groupTaskRepository.save(task);
         });
+    }
+    public boolean isUserAssignedtoGroupTask(Principal connectedUser,Long id)
+    {
+        var searchedUser = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        List<Long> ids=new ArrayList<>();
+        groupTaskRepository.findById(id).ifPresent(task->
+        {
+            for (Team team: task.getTeams()){
+                for (User user: team.getMembers()){
+                    if (user.getId()==searchedUser.getId())
+                        ids.add(user.getId());
+                }
+            }
+        });
+
+        if(ids.isEmpty())
+            return false;
+        return true;
+
     }
 
 
@@ -122,6 +143,7 @@ public class GroupTaskService {
                 ,groupTask.getDate(),groupTask.getDeadline(), groupTask.getContents(), teamsDTO);
 
     }
+
 
     static TeamDTO map(Team team){
         List<UserDTO> users=new ArrayList<>();

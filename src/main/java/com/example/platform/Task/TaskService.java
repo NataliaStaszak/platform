@@ -5,6 +5,9 @@ import com.example.platform.Task.GroupTask.GroupTaskDTO;
 import com.example.platform.Task.GroupTask.GroupTaskService;
 import com.example.platform.Task.IndividualTask.IndividualTaskDTO;
 import com.example.platform.Task.IndividualTask.IndividualTaskService;
+import com.example.platform.User.User;
+import com.example.platform.course.CourseService;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
@@ -18,10 +21,12 @@ import java.util.List;
 public class TaskService {
     private IndividualTaskService individualTaskService;
     private GroupTaskService groupTaskService;
+    private CourseService courseService;
 
-    public TaskService(IndividualTaskService individualTaskService, GroupTaskService groupTaskService) {
+    public TaskService(IndividualTaskService individualTaskService, GroupTaskService groupTaskService,CourseService courseService) {
         this.individualTaskService = individualTaskService;
         this.groupTaskService = groupTaskService;
+        this.courseService=courseService;
     }
 
     public List<TaskDTO> findAllIndividualTaskfromCourse(Long id) {
@@ -63,5 +68,16 @@ public class TaskService {
         else
             groupTaskService.deleteTask(request.getTaskId());
 
+    }
+
+    public boolean isUserMemberOrAdmin(Principal connectedUser,Long id) {
+        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        if(courseService.isUserMember(id,user)||courseService.isUserAuthor(id,user))
+            return true;
+        return false;
+    }
+    public boolean isUserAssignedToTask(Principal connectedUser,Long TaskId)
+    {
+        return groupTaskService.isUserAssignedtoGroupTask(connectedUser,TaskId);
     }
 }

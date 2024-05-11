@@ -20,8 +20,12 @@ public class InvitationService {
         this.userService = userService;
         this.courseService = courseService;
     }
+
     public void askToJoin(User user, Course course) {
-        repository.save(new PendingInvite(user,course));
+        System.out.println(repository.existsByCourse_IdAndAndUser_Id(course.getId(),user.getId()));
+        System.out.println(courseService.isUserMember(course.getId(), user));
+        if (!repository.existsByCourse_IdAndAndUser_Id(course.getId(), user.getId())&&!courseService.isUserMember(course.getId(), user))
+            repository.save(new PendingInvite(user,course));
     }
     public void acceptInvite(Long id) {
         Optional<PendingInvite> invite = repository.findById(id);

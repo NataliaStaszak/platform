@@ -7,6 +7,7 @@ import com.example.platform.Task.IndividualTask.IndividualTaskDTO;
 import com.example.platform.Task.IndividualTask.IndividualTaskService;
 import com.example.platform.Task.IndividualTask.SaveIndividualTaskRequest;
 import org.apache.catalina.Group;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,15 +47,18 @@ public class TaskController {
     }
     @GetMapping("groupTask/{id}")
     @ResponseBody
-    public ResponseEntity<GroupTaskDTO> GetGroupTaskById(@PathVariable Long id) {
+    public ResponseEntity<GroupTaskDTO> GetGroupTaskById(@PathVariable Long id,Principal connectedUser) {
         return groupTaskService.getGroupTaskById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @GetMapping("/course/{id}")
-    public ResponseEntity<List<TaskDTO>> findAllfromCourse(@PathVariable Long id) {
-        return ResponseEntity.ok(taskService.findAllIndividualTaskfromCourse(id));
+    public ResponseEntity<List<TaskDTO>> findAllfromCourse(@PathVariable Long id,Principal connectedUser) {
+
+        if(taskService.isUserMemberOrAdmin(connectedUser,id))
+            return ResponseEntity.ok(taskService.findAllIndividualTaskfromCourse(id));
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
     }
 
     @GetMapping("/myTasks")
@@ -68,9 +72,7 @@ public class TaskController {
     }
 
     @PatchMapping()
-    public ResponseEntity<?> changeDeadline(
-            @RequestBody DeadlineChangeRequest request
-    ) {
+    public ResponseEntity<?> changeDeadline(@RequestBody DeadlineChangeRequest request) {
         taskService.changeDeadline(request);
         return ResponseEntity.ok().build();
     }
