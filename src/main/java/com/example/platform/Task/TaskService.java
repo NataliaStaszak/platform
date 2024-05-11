@@ -3,6 +3,7 @@ package com.example.platform.Task;
 import com.example.platform.Task.GroupTask.GroupTask;
 import com.example.platform.Task.GroupTask.GroupTaskDTO;
 import com.example.platform.Task.GroupTask.GroupTaskService;
+import com.example.platform.Task.IndividualTask.IndividualTask;
 import com.example.platform.Task.IndividualTask.IndividualTaskDTO;
 import com.example.platform.Task.IndividualTask.IndividualTaskService;
 import com.example.platform.User.User;
@@ -11,11 +12,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.Collections;
-import java.util.Comparator;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class TaskService {
@@ -53,6 +50,8 @@ public class TaskService {
         return list;
     }
 
+
+
     public void changeDeadline(DeadlineChangeRequest request) {
         if(request.getIsIndividual())
             individualTaskService.changeDeadline(request);
@@ -75,9 +74,5 @@ public class TaskService {
         if(courseService.isUserMember(id,user)||courseService.isUserAuthor(id,user))
             return true;
         return false;
-    }
-    public boolean isUserAssignedToTask(Principal connectedUser,Long TaskId)
-    {
-        return groupTaskService.isUserAssignedtoGroupTask(connectedUser,TaskId);
     }
 }

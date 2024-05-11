@@ -1,15 +1,13 @@
 package com.example.platform.Task.GroupTask;
 
 import com.example.platform.Task.DeadlineChangeRequest;
-import com.example.platform.Task.IndividualTask.IndividualTask;
-import com.example.platform.Task.IndividualTask.IndividualTaskDTO;
-import com.example.platform.Task.IndividualTask.IndividualTaskService;
 import com.example.platform.User.User;
 import com.example.platform.User.UserDTO;
 import com.example.platform.User.UserRepository;
 import com.example.platform.course.Course;
-import com.example.platform.course.CourseDTO;
 import com.example.platform.course.CourseRepository;
+import com.example.platform.course.CourseService;
+import com.example.platform.resource.TaskResourceDTO;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class GroupTaskService {
@@ -25,12 +24,14 @@ public class GroupTaskService {
     private final TeamRepository teamRepository;
     private final UserRepository userRepository;
     private final CourseRepository courseRepository;
+    private final CourseService courseService;
 
-    public GroupTaskService(GroupTaskRepository groupTaskRepository, TeamRepository teamRepository, UserRepository userRepository, CourseRepository courseRepository) {
+    public GroupTaskService(GroupTaskRepository groupTaskRepository, TeamRepository teamRepository, UserRepository userRepository, CourseRepository courseRepository, CourseService courseService) {
         this.groupTaskRepository = groupTaskRepository;
         this.teamRepository = teamRepository;
         this.userRepository = userRepository;
         this.courseRepository = courseRepository;
+        this.courseService = courseService;
     }
     public Optional<GroupTaskDTO> getGroupTaskById(Long id) {
         return groupTaskRepository.findById(id).map(GroupTaskService::map);

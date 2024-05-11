@@ -67,6 +67,7 @@ public class ResourceController {
     public List<TaskResourceDTO> getResourcesfromTask(@PathVariable Long id) throws Exception {
         return taskResourceService.getResourcesFromTask(id);
     }
+
     //Group
 
     @PostMapping("/uploadGroup/{id}")
@@ -109,5 +110,6 @@ public class ResourceController {
     public List<TaskResourceDTO> getResourcesfromGroupTask(@PathVariable Long id) throws Exception {
         return groupTaskResourceService.getResourcesFromGroupTask(id);
     }
+    //GetAllForgottenTasks
 
 }

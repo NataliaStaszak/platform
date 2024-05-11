@@ -6,9 +6,12 @@ import com.example.platform.Task.GroupTask.GroupTaskService;
 import com.example.platform.Task.IndividualTask.IndividualTaskDTO;
 import com.example.platform.Task.IndividualTask.IndividualTaskService;
 import com.example.platform.Task.IndividualTask.SaveIndividualTaskRequest;
+import com.example.platform.Task.IndividualTask.TaskNotSolvedReport;
+import com.example.platform.User.User;
 import org.apache.catalina.Group;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -69,6 +72,11 @@ public class TaskController {
     @GetMapping("/myTasksAdmin")
     public ResponseEntity<List<TaskDTO>> findAllTaskofAdmin(Principal connectedUser) {
         return ResponseEntity.ok(taskService.findAllOfAdmin(connectedUser));
+    }
+    @GetMapping("/myUnsolvedTasksAdmin")
+    public ResponseEntity<List<TaskNotSolvedReport>> findAllUnsolvedTaskofAdmin(Principal connectedUser) {
+        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        return ResponseEntity.ok(individualTaskService.findAllUnsolvedTasksOfAdmin(connectedUser));
     }
 
     @PatchMapping()

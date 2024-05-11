@@ -48,7 +48,7 @@ public class UserService {
             users.add(UserService.map(user));
         return users;
     }
-    Optional<UserDTO> getUserDTOById(Long id){
+    public Optional<UserDTO> getUserDTOById(Long id){
         return repository.findById(id).map(UserService::map);
     }
     public void deleteUser(Long id) {
