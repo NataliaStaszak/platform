@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.core.io.Resource;
 
 import java.security.Principal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/resources")
@@ -56,6 +57,16 @@ public class ResourceController {
                                 + "\"")
                 .body(new ByteArrayResource(taskResource.getData()));
     }
+
+    //GET ALL RESOURCES FROM TASK AS ADMIN/USER
+    @GetMapping("/myFromTask/{id}")
+    public List<TaskResourceDTO> getUserResourcesfromTask(@PathVariable Long id, Principal connectedUser) throws Exception {
+        return taskResourceService.getResourcesFromTaskOfUser(id,connectedUser);
+    }
+    @GetMapping("/fromTask/{id}")
+    public List<TaskResourceDTO> getResourcesfromTask(@PathVariable Long id) throws Exception {
+        return taskResourceService.getResourcesFromTask(id);
+    }
     //Group
 
     @PostMapping("/uploadGroup/{id}")
@@ -88,6 +99,15 @@ public class ResourceController {
                         "attachment; filename=\"" + taskResource.getFileName()
                                 + "\"")
                 .body(new ByteArrayResource(taskResource.getData()));
+    }
+    //GET ALL RESOURCES FROM TASK AS ADMIN/USER
+    @GetMapping("/myFromGroupTask/{id}")
+    public List<TaskResourceDTO> getUserResourcesfromGroupTask(@PathVariable Long id, Principal connectedUser) throws Exception {
+        return groupTaskResourceService.getResourcesFromGroupTaskOfUser(id,connectedUser);
+    }
+    @GetMapping("/fromGroupTask/{id}")
+    public List<TaskResourceDTO> getResourcesfromGroupTask(@PathVariable Long id) throws Exception {
+        return groupTaskResourceService.getResourcesFromGroupTask(id);
     }
 
 }
