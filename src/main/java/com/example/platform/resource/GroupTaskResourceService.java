@@ -122,6 +122,15 @@ public class GroupTaskResourceService {
         });
         return team;
     }
+    public List<TaskResourceDTO> getResourcesFromTask(Long taskId) {
+        List<TaskResourceDTO> responseData=new ArrayList<>();
+        List<GroupTaskResource> resources = groupTaskResourceRepository.getAllByGroupTask_Id(taskId);
+        for(GroupTaskResource resource:resources)
+        {
+            responseData.add(map(resource));
+        }
+        return responseData;
+    }
 
 }
 

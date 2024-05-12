@@ -92,18 +92,18 @@ public class IndividualTaskService {
         });
     }
     //TODO //TODO //TODO //TODO//TODO //TODO//TODO //TODO//TODO //TODO//TODO //TODOv//TODO //TODOvv//TODO //TODO//TODO //TODO
-    public List<TaskNotSolvedReport> findAllUnsolvedTasksOfAdmin(Principal connectedUser){
+    public List<IndividualTaskNotSolvedReport> findAllUnsolvedTasksOfAdmin(Principal connectedUser){
         var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
         Date now =new Date();
         List<IndividualTask> tasks = repository.getAllByDeadlineBeforeAndAndCourse_Author_Id(now,user.getId());
-        List<TaskNotSolvedReport> reports=new ArrayList<>();
+        List<IndividualTaskNotSolvedReport> reports=new ArrayList<>();
         for(IndividualTask task:tasks)
         {
             List<UserDTO> users=new ArrayList<>();
             List<Long>ids=getAllUsersWithoutSolution(task.getCourse().getId(),task.getId());
             for(Long id:ids)
                 userService.getUserDTOById(id).ifPresent(users::add);
-            reports.add(new TaskNotSolvedReport(IndividualTaskService.map(task),users));
+            reports.add(new IndividualTaskNotSolvedReport(IndividualTaskService.map(task),users));
 
         }
         return reports;

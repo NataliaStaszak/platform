@@ -1,11 +1,8 @@
 package com.example.platform.Task;
 
-import com.example.platform.Task.GroupTask.GroupTask;
-import com.example.platform.Task.GroupTask.GroupTaskDTO;
 import com.example.platform.Task.GroupTask.GroupTaskService;
-import com.example.platform.Task.IndividualTask.IndividualTask;
-import com.example.platform.Task.IndividualTask.IndividualTaskDTO;
 import com.example.platform.Task.IndividualTask.IndividualTaskService;
+import com.example.platform.Task.IndividualTask.IndividualTaskNotSolvedReport;
 import com.example.platform.User.User;
 import com.example.platform.course.CourseService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,6 +21,13 @@ public class TaskService {
         this.individualTaskService = individualTaskService;
         this.groupTaskService = groupTaskService;
         this.courseService=courseService;
+    }
+
+    public List<TaskNotSolvedReport> reportUnsolved(Principal connectedUser) {
+        List<TaskNotSolvedReport> reports = new ArrayList<>();
+        reports.addAll(groupTaskService.findAllUnsolvedTasksOfAdmin(connectedUser));
+        reports.addAll(individualTaskService.findAllUnsolvedTasksOfAdmin(connectedUser));
+        return reports;
     }
 
     public List<TaskDTO> findAllIndividualTaskfromCourse(Long id) {

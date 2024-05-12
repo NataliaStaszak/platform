@@ -1,12 +1,14 @@
 package com.example.platform.Task.GroupTask;
 
 import com.example.platform.Task.DeadlineChangeRequest;
+import com.example.platform.Task.TaskDTO;
 import com.example.platform.User.User;
 import com.example.platform.User.UserDTO;
 import com.example.platform.User.UserRepository;
 import com.example.platform.course.Course;
 import com.example.platform.course.CourseRepository;
 import com.example.platform.course.CourseService;
+import com.example.platform.resource.GroupTaskResourceService;
 import com.example.platform.resource.TaskResourceDTO;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
@@ -25,13 +27,15 @@ public class GroupTaskService {
     private final UserRepository userRepository;
     private final CourseRepository courseRepository;
     private final CourseService courseService;
+    private final GroupTaskResourceService groupTaskResourceService;
 
-    public GroupTaskService(GroupTaskRepository groupTaskRepository, TeamRepository teamRepository, UserRepository userRepository, CourseRepository courseRepository, CourseService courseService) {
+    public GroupTaskService(GroupTaskRepository groupTaskRepository, TeamRepository teamRepository, UserRepository userRepository, CourseRepository courseRepository, CourseService courseService, GroupTaskResourceService groupTaskResourceService) {
         this.groupTaskRepository = groupTaskRepository;
         this.teamRepository = teamRepository;
         this.userRepository = userRepository;
         this.courseRepository = courseRepository;
         this.courseService = courseService;
+        this.groupTaskResourceService = groupTaskResourceService;
     }
     public Optional<GroupTaskDTO> getGroupTaskById(Long id) {
         return groupTaskRepository.findById(id).map(GroupTaskService::map);
@@ -131,6 +135,38 @@ public class GroupTaskService {
         return true;
 
     }
+    public List<GroupTaskNotSolvedReport> findAllUnsolvedTasksOfAdmin(Principal connectedUser){
+        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        Date now =new Date();
+        List<GroupTask> tasks = groupTaskRepository.getAllByDeadlineBeforeAndAndCourse_Author_Id(now,user.getId());
+        List<GroupTaskNotSolvedReport> reports=new ArrayList<>();
+        for(GroupTask task:tasks)
+        {
+            List<TeamDTO> teams=new ArrayList<>();
+            for(Team team:getAllTeamsWithoutSolution(task))
+                teams.add(map(team));
+
+            reports.add(new GroupTaskNotSolvedReport(GroupTaskService.mapTask(task),teams));
+
+        }
+        return reports;
+    }
+
+    public List<Team> getAllTeamsWithoutSolution(GroupTask task){
+        List<Long> teamsIds=new ArrayList<>();
+        for(Team team:task.getTeams())
+            teamsIds.add(team.getId());
+        List<Long> resourcesAuthors=new ArrayList<>();
+        for(TaskResourceDTO resource:groupTaskResourceService.getResourcesFromTask(task.getId()))
+        {
+            resourcesAuthors.add(resource.getAuthorId());
+        }
+        List<Long> missingTeamsIds = teamsIds.stream()
+                .filter(teamId -> !resourcesAuthors.contains(teamId))
+                .collect(Collectors.toList());
+        return (List<Team>) teamRepository.findAllById(missingTeamsIds);
+
+    }
 
 
     static GroupTaskDTO map(GroupTask groupTask){
@@ -142,6 +178,11 @@ public class GroupTaskService {
         }
         return new GroupTaskDTO(groupTask.getId(), groupTask.getCourse().getName()
                 ,groupTask.getDate(),groupTask.getDeadline(), groupTask.getContents(), teamsDTO);
+
+    }
+    static TaskDTO mapTask(GroupTask groupTask){
+        return new TaskDTO(groupTask.getId(), groupTask.getCourse().getName()
+                ,groupTask.getDate(),groupTask.getDeadline(), groupTask.getContents());
 
     }
 
