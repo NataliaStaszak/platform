@@ -6,7 +6,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/platform
     username: root
-    password: admin
+    password: jd123
     driver-class-name: com.mysql.cj.jdbc.Driver
 
     show-sql: false
@@ -18,6 +18,9 @@ spring:
       ddl-auto: update
     database: mysql
     database-platform: org.hibernate.dialect.MySQLDialect
+server:
+  port: 8082
+
 logging:
   level:
     root: debug
