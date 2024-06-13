@@ -50,5 +50,10 @@ public class UserController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+    @GetMapping("/current")
+    @ResponseBody
+    public ResponseEntity<CurrentUserDTO> GetCurrent(Principal connectedUser){
+        return  ResponseEntity.ok(service.getCurrent(connectedUser));
+    }
 
 }

@@ -59,9 +59,8 @@ public class UserService {
     }
 
 
-
-
-
-
-
+    public CurrentUserDTO getCurrent(Principal connectedUser) {
+        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        return new CurrentUserDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getRole());
+    }
 }
