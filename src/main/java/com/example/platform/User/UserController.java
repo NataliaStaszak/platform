@@ -50,6 +50,14 @@ public class UserController {
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/email/{email}")
+    @ResponseBody
+    public ResponseEntity<UserDTO> GetByEmail(@PathVariable String email){
+        return service.getUserDTOByEmail(email)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
     @GetMapping("/current")
     @ResponseBody
     public ResponseEntity<CurrentUserDTO> GetCurrent(Principal connectedUser){

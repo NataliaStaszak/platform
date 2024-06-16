@@ -63,4 +63,8 @@ public class UserService {
         var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
         return new CurrentUserDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getRole());
     }
+
+    public Optional<UserDTO> getUserDTOByEmail(String email) {
+        return repository.findByEmail(email).map(UserService::map);
+    }
 }
