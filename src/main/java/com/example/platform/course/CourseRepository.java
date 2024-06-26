@@ -8,6 +8,8 @@ import java.util.List;
 public interface CourseRepository extends CrudRepository<Course,Long> {
     List<Course> findAllByAttendantsContains(User user);
     List<Course> findAllByAuthorId(Long id);
+    boolean existsByIdAndAndAttendantsContains(Long Courseid,User user);
+    boolean existsByIdAndAndAuthor(Long Courseid,User user);
 
 
 }

@@ -1,27 +1,33 @@
 package com.example.platform.Task;
 
-import com.example.platform.Task.GroupTask.GroupTask;
-import com.example.platform.Task.GroupTask.GroupTaskDTO;
 import com.example.platform.Task.GroupTask.GroupTaskService;
-import com.example.platform.Task.IndividualTask.IndividualTaskDTO;
 import com.example.platform.Task.IndividualTask.IndividualTaskService;
+import com.example.platform.Task.IndividualTask.IndividualTaskNotSolvedReport;
+import com.example.platform.User.User;
+import com.example.platform.course.CourseService;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 import java.security.Principal;
-import java.util.Collections;
-import java.util.Comparator;
-
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class TaskService {
     private IndividualTaskService individualTaskService;
     private GroupTaskService groupTaskService;
+    private CourseService courseService;
 
-    public TaskService(IndividualTaskService individualTaskService, GroupTaskService groupTaskService) {
+    public TaskService(IndividualTaskService individualTaskService, GroupTaskService groupTaskService,CourseService courseService) {
         this.individualTaskService = individualTaskService;
         this.groupTaskService = groupTaskService;
+        this.courseService=courseService;
+    }
+
+    public List<TaskNotSolvedReport> reportUnsolved(Principal connectedUser) {
+        List<TaskNotSolvedReport> reports = new ArrayList<>();
+        reports.addAll(groupTaskService.findAllUnsolvedTasksOfAdmin(connectedUser));
+        reports.addAll(individualTaskService.findAllUnsolvedTasksOfAdmin(connectedUser));
+        return reports;
     }
 
     public List<TaskDTO> findAllIndividualTaskfromCourse(Long id) {
@@ -48,6 +54,8 @@ public class TaskService {
         return list;
     }
 
+
+
     public void changeDeadline(DeadlineChangeRequest request) {
         if(request.getIsIndividual())
             individualTaskService.changeDeadline(request);
@@ -64,4 +72,21 @@ public class TaskService {
             groupTaskService.deleteTask(request.getTaskId());
 
     }
+
+    public boolean isUserMemberOrAdmin(Principal connectedUser,Long id) {
+        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        if(courseService.isUserMember(id,user)||courseService.isUserAuthor(id,user))
+            return true;
+        return false;
+    }
+
+    public List<TaskDTO> findAllOfUserFromCourse(Principal connectedUser, Long id) {
+        List<TaskDTO> list = new ArrayList<>();
+        System.out.println("service: "+ id);
+        list.addAll(individualTaskService.findAllOfUserFromCourse(connectedUser,id));
+        list.addAll(groupTaskService.findAllOfUserFromCourse(connectedUser,id));
+        Collections.sort(list, Comparator.comparing(TaskDTO::getDate));
+        return list;
+    }
+
 }

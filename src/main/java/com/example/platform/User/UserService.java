@@ -48,7 +48,7 @@ public class UserService {
             users.add(UserService.map(user));
         return users;
     }
-    Optional<UserDTO> getUserDTOById(Long id){
+    public Optional<UserDTO> getUserDTOById(Long id){
         return repository.findById(id).map(UserService::map);
     }
     public void deleteUser(Long id) {
@@ -59,9 +59,12 @@ public class UserService {
     }
 
 
+    public CurrentUserDTO getCurrent(Principal connectedUser) {
+        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        return new CurrentUserDTO(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail(), user.getRole());
+    }
 
-
-
-
-
+    public Optional<UserDTO> getUserDTOByEmail(String email) {
+        return repository.findByEmail(email).map(UserService::map);
+    }
 }
