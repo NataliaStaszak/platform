@@ -56,6 +56,7 @@ public class SecurityConfiguration {
                         .requestMatchers( HttpMethod.GET,"/api/v1/tasks/groupTask/**").authenticated()
                         .requestMatchers( HttpMethod.GET,"/api/v1/tasks/course/**").authenticated()
                         .requestMatchers( HttpMethod.GET,"/api/v1/tasks/myTasks").hasAnyRole("USER")
+                        .requestMatchers( HttpMethod.GET,"/api/v1/tasks/myTasks/**").hasAnyRole("USER")
                         .requestMatchers( HttpMethod.GET,"/api/v1/tasks/myTasksAdmin").hasAnyRole("ADMIN")
                         .requestMatchers( HttpMethod.GET,"/api/v1/tasks/myUnsolvedTasksAdmin").hasAnyRole("ADMIN")
                         .requestMatchers( HttpMethod.PATCH,"/api/v1/tasks").hasAnyRole("ADMIN")

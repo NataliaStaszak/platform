@@ -64,6 +64,14 @@ public class IndividualTaskService {
         }
         return tasks;
     }
+    public List<IndividualTaskDTO> findAllOfUserFromCourse(Principal connectedUser,Long id) {
+        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        Optional<Course> course = courseRepository.findById(id);
+        List<IndividualTaskDTO> tasks= new ArrayList<>();
+        for(IndividualTask task :repository.getAllByCourse_Id(id)){
+                tasks.add(IndividualTaskService.map(task));}
+        return tasks;
+    }
 
     public List<IndividualTaskDTO> findAllOfAdmin(Principal connectedUser) {
         List<Course> courses = courseRepository.findAllByAuthorId(
@@ -77,6 +85,7 @@ public class IndividualTaskService {
         }
         return tasks;
     }
+
     public void deleteTask(Long id) {
         System.out.println("DELETE BY ID");
         repository.deleteById(id);
@@ -91,7 +100,7 @@ public class IndividualTaskService {
             repository.save(task);
         });
     }
-    //TODO //TODO //TODO //TODO//TODO //TODO//TODO //TODO//TODO //TODO//TODO //TODOv//TODO //TODOvv//TODO //TODO//TODO //TODO
+
     public List<IndividualTaskNotSolvedReport> findAllUnsolvedTasksOfAdmin(Principal connectedUser){
         var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
         Date now =new Date();

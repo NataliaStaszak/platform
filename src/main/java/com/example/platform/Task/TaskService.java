@@ -79,4 +79,14 @@ public class TaskService {
             return true;
         return false;
     }
+
+    public List<TaskDTO> findAllOfUserFromCourse(Principal connectedUser, Long id) {
+        List<TaskDTO> list = new ArrayList<>();
+        System.out.println("service: "+ id);
+        list.addAll(individualTaskService.findAllOfUserFromCourse(connectedUser,id));
+        list.addAll(groupTaskService.findAllOfUserFromCourse(connectedUser,id));
+        Collections.sort(list, Comparator.comparing(TaskDTO::getDate));
+        return list;
+    }
+
 }
