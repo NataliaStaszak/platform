@@ -61,6 +61,16 @@ public class GroupTaskService {
         return tasks;
     }
 
+    public List<GroupTaskDTO> findAllOfUserFromCourse(Principal connectedUser,Long id) {
+        var user = (User) ((UsernamePasswordAuthenticationToken) connectedUser).getPrincipal();
+        List<GroupTaskDTO> tasks= new ArrayList<>();
+        for(GroupTask task :groupTaskRepository.getAllByCourse_Id(id)){
+            if (isUserAssignedtoGroupTask(connectedUser,task.getId()))
+                tasks.add(GroupTaskService.map(task));
+        }
+        return tasks;
+    }
+
 
     public List<GroupTaskDTO> findAllOfAdmin(Principal connectedUser) {
         List<Course> courses = courseRepository.findAllByAuthorId(

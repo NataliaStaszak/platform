@@ -82,6 +82,12 @@ public class TaskController {
         logger.info("Found {} number of tasks for user {}", result.size(), connectedUser.getName());
         return ResponseEntity.ok(result);
     }
+    @GetMapping("/myTasks/{id}")
+    public ResponseEntity<List<TaskDTO>> findAllTaskofUserFromCourse(Principal connectedUser,@PathVariable Long id) {
+        var result = taskService.findAllOfUserFromCourse(connectedUser,id);
+        logger.info("Found {} number of tasks for user {}", result.size(), connectedUser.getName());
+        return ResponseEntity.ok(result);
+    }
 
     @GetMapping("/myTasksAdmin")
     public ResponseEntity<List<TaskDTO>> findAllTaskofAdmin(Principal connectedUser) {
@@ -89,6 +95,8 @@ public class TaskController {
         logger.info("Found {} number of tasks for admin {}", result.size(), connectedUser.getName());
         return ResponseEntity.ok(result);
     }
+
+
     @GetMapping("/myUnsolvedTasksAdmin")
     public ResponseEntity<List<TaskNotSolvedReport>> findAllUnsolvedTaskofAdmin(Principal connectedUser) {
         var result = taskService.reportUnsolved(connectedUser);
