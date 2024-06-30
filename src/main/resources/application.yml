@@ -25,15 +25,10 @@ spring:
       ddl-auto: update
     database: mysql
     database-platform: org.hibernate.dialect.MySQLDialect
-<<<<<<< HEAD
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
-=======
-server:
-  port: 8082
 
->>>>>>> 1ec7390efbbfd4d2deb16776d6bc7e8a62e36454
 logging:
   level:
     root: debug
